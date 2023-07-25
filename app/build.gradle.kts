@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("org.barfuin.gradle.taskinfo") version "2.1.0"
 }
 
 repositories {
@@ -40,4 +41,30 @@ application {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.register("testWithMsg"){
+    group = "Verification"
+    dependsOn("test")
+    finalizedBy("msgAfterTest")
+
+    doLast(){
+        println("Tests Done!")
+    }
+}
+
+tasks.register("msgAfterTest") {
+    group = "Verification"
+    description = "an appropriate description"
+
+    doLast() {
+        println("Tests Done!!")
+    }
+}
+
+tasks.register<Copy>("backupTestXml") {
+    from("build/test-results/test")
+    into("/tmp/unbroken")
+
+    exclude("binary/**")
 }
