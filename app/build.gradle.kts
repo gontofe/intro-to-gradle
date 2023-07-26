@@ -9,24 +9,12 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     id("org.barfuin.gradle.taskinfo") version "2.1.0"
-}
-
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
+    id("shared-build-conventions")
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // This dependency is used by the application.
-    implementation("com.google.guava:guava:31.1-jre")
-
+    implementation(project(":model"))
     implementation("com.google.http-client:google-http-client:1.41.8")
-
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -41,33 +29,3 @@ application {
     mainClass.set("com.gradle.lab.App")
 }
 
-tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
-}
-
-tasks.register("testWithMsg"){
-    group = "Verification"
-    dependsOn("test")
-    finalizedBy("msgAfterTest")
-
-    doLast(){
-        println("Tests Done!")
-    }
-}
-
-tasks.register("msgAfterTest") {
-    group = "Verification"
-    description = "an appropriate description"
-
-    doLast() {
-        println("Tests Done!!")
-    }
-}
-
-tasks.register<Copy>("backupTestXml") {
-    from("build/test-results/test")
-    into("/tmp/unbroken")
-
-    exclude("binary/**")
-}

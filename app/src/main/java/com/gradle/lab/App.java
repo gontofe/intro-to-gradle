@@ -8,13 +8,16 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import java.io.IOException;
 
 public class App {
+
+    AppModel appmodel = new AppModel();
+
     public String getGreeting() {
-        return "Hello World!";
+        return appmodel.getGreeting();
     }
 
     public String getUrl() {
         // This is a small website and easily prints.
-        return "https://wiby.me/";
+        return appmodel.getUrl();
     }
 
     public static void main(String[] args) throws IOException {
